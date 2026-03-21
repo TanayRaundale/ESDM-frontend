@@ -1,5 +1,11 @@
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { Platform } from "react-native";
+
+// ✅ Import global CSS only on web to remove scrollbar
+if (Platform.OS === "web") {
+  require("../global.css");
+}
 
 SplashScreen.preventAutoHideAsync();
 
