@@ -28,6 +28,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [secure, setSecure] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [focusedField, setFocusedField] = useState(null);
 
   const handleLogin = async () => {
     try {
@@ -163,10 +164,10 @@ export default function Login() {
             </Text>
 
             {[
-              { icon: "book-outline", text: "Access study notes anytime" },
-              { icon: "help-circle-outline", text: "Take quizzes & track scores" },
-              { icon: "document-text-outline", text: "Submit assignments online" },
-              { icon: "brush-outline", text: "Practice diagrams interactively" },
+              { icon: "book-outline",          text: "Access study notes anytime"       },
+              { icon: "help-circle-outline",   text: "Take quizzes & track scores"      },
+              { icon: "document-text-outline", text: "Submit assignments online"         },
+              { icon: "brush-outline",         text: "Practice diagrams interactively"  },
             ].map((f, i) => (
               <View key={i} style={webStyles.featureItem}>
                 <View style={webStyles.featureIconBox}>
@@ -196,9 +197,17 @@ export default function Login() {
               Sign in to your account to continue
             </Text>
 
+            {/* Email */}
             <Text style={webStyles.fieldLabel}>Email address</Text>
-            <View style={webStyles.inputWrapper}>
-              <Ionicons name="mail-outline" size={18} color="#94a3b8" />
+            <View style={[
+              webStyles.inputWrapper,
+              focusedField === "email" && webStyles.inputWrapperFocused,
+            ]}>
+              <Ionicons
+                name="mail-outline"
+                size={18}
+                color={focusedField === "email" ? "#2563eb" : "#94a3b8"}
+              />
               <TextInput
                 placeholder="you@example.com"
                 placeholderTextColor="#94a3b8"
@@ -207,12 +216,22 @@ export default function Login() {
                 keyboardType="email-address"
                 value={email}
                 onChangeText={setEmail}
+                onFocus={() => setFocusedField("email")}
+                onBlur={() => setFocusedField(null)}
               />
             </View>
 
+            {/* Password */}
             <Text style={webStyles.fieldLabel}>Password</Text>
-            <View style={webStyles.inputWrapper}>
-              <Ionicons name="lock-closed-outline" size={18} color="#94a3b8" />
+            <View style={[
+              webStyles.inputWrapper,
+              focusedField === "password" && webStyles.inputWrapperFocused,
+            ]}>
+              <Ionicons
+                name="lock-closed-outline"
+                size={18}
+                color={focusedField === "password" ? "#2563eb" : "#94a3b8"}
+              />
               <TextInput
                 placeholder="Enter your password"
                 placeholderTextColor="#94a3b8"
@@ -220,6 +239,8 @@ export default function Login() {
                 secureTextEntry={secure}
                 value={password}
                 onChangeText={setPassword}
+                onFocus={() => setFocusedField("password")}
+                onBlur={() => setFocusedField(null)}
               />
               <TouchableOpacity onPress={() => setSecure(!secure)}>
                 <Ionicons
@@ -514,6 +535,8 @@ const webStyles = StyleSheet.create({
     color: "#374151",
     marginBottom: 8,
   },
+
+  // ── KEY FIX: outline removed, focus ring on wrapper ──
   inputWrapper: {
     flexDirection: "row",
     alignItems: "center",
@@ -525,12 +548,23 @@ const webStyles = StyleSheet.create({
     backgroundColor: "#f8fafc",
     marginBottom: 18,
   },
+  inputWrapperFocused: {
+    borderColor: "#2563eb",
+    backgroundColor: "#fff",
+    shadowColor: "#2563eb",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 0 },
+  },
   input: {
     flex: 1,
     fontSize: 15,
     color: "#0f172a",
     marginLeft: 10,
+    outlineStyle: "none",  // removes browser default blue outline
+    outlineWidth: 0,
   },
+
   loginBtn: {
     backgroundColor: "#2563eb",
     paddingVertical: 14,
